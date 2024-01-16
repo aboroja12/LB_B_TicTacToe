@@ -38,7 +38,7 @@
 
         <Button
             android:id="@+id/backToGame"
-            android:layout_width="320dp"
+            android:layout_width="290dp"
             android:layout_height="55dp"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="120dp"

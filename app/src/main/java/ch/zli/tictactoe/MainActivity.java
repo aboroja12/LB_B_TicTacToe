@@ -1,12 +1,16 @@
 package ch.zli.tictactoe;
 
 import androidx.appcompat.app.AlertDialog;
+
+import android.app.NotificationManager;
+import android.app.NotificationChannel;
 import android.content.DialogInterface;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+
 import android.content.Intent;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
-import android.widget.Toast;
 import android.content.Context;
 import android.os.Build;
 
@@ -24,6 +28,10 @@ public class MainActivity extends AppCompatActivity {
 
     private Button Scoreboard;
 
+    private static final String CHANNEL_ID = "defaultChannel";
+    private static final String CHANNEL_NAME = "Default Channel";
+
+    private NotificationManager notificationManager;
 
 
 
@@ -31,22 +39,22 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        button1=findViewById(R.id.buttonImage1);
-        button2=findViewById(R.id.buttonImage2);
-        button3=findViewById(R.id.buttonImage3);
-        button4=findViewById(R.id.buttonImage4);
-        button5=findViewById(R.id.buttonImage5);
-        button6=findViewById(R.id.buttonImage6);
-        button7=findViewById(R.id.buttonImage7);
-        button8=findViewById(R.id.buttonImage8);
-        button9=findViewById(R.id.buttonImage9);
+        button1 = findViewById(R.id.buttonImage1);
+        button2 = findViewById(R.id.buttonImage2);
+        button3 = findViewById(R.id.buttonImage3);
+        button4 = findViewById(R.id.buttonImage4);
+        button5 = findViewById(R.id.buttonImage5);
+        button6 = findViewById(R.id.buttonImage6);
+        button7 = findViewById(R.id.buttonImage7);
+        button8 = findViewById(R.id.buttonImage8);
+        button9 = findViewById(R.id.buttonImage9);
         Reset = findViewById(R.id.Reset);
         Scoreboard = findViewById(R.id.scoreboard);
-
 
         Reset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                sendNotification();
                 button1.setImageDrawable(null);
                 button2.setImageDrawable(null);
                 button3.setImageDrawable(null);
@@ -70,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -81,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
                     i++;
                 }
                 else
-                    {
+                {
                     button1.setImageResource(R.drawable.circle);
                     b1=0;
                     i++;
@@ -258,8 +267,20 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        this.notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
 
-
+    private void sendNotification() {
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+                .setSmallIcon(android.R.drawable.ic_media_play)
+                .setContentTitle("Game reset")
+                .setContentText("you have reset the Game!")
+                .setPriority(NotificationCompat.PRIORITY_HIGH);
+        notificationManager.notify(1, builder.build());
     }
 
     private void winningGame()
