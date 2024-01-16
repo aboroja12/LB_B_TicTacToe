@@ -761,7 +761,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
     private void choosePlayer()
     {
         if(startGame.equals("X"))
